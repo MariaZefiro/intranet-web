@@ -1,0 +1,113 @@
+.sidebar {
+    background-color: #F5F5F5;
+    padding: 20px;
+    width: 15%;
+    border-radius: 15px;
+    font-family: Arial, sans-serif;
+}
+
+h3 {
+    color: #045441;
+    margin-bottom: 15px;
+}
+
+.apps-section {
+    margin-bottom: 20px;
+}
+
+.apps {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.app-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    background-color: #E0E0E0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #009373;
+}
+
+.app-icon2 {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    background-color: #E0E0E0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #009373;
+}
+
+.lesteboard-icon {
+
+    background-size: cover;
+}
+
+.other-icon {
+    
+    background-size: cover;
+}
+
+.add-icon {
+    background-color: #E0E0E0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quick-access ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.quick-access ul li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: #045441;
+}
+
+.quick-access ul li i {
+    font-size: 20px;
+}
+
+.team {
+    margin-top: 20px;
+}
+
+.team-member {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #cfcdcb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.member-info p {
+    font-weight: bold;
+    margin: 0;
+    color: #045441;
+}
+
+.member-info span {
+    color: #757575;
+    font-size: 12px;
+}

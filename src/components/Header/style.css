@@ -1,0 +1,39 @@
+.header {
+    display: flex;
+    align-items: flex-end; 
+    background-color: #009373;
+    padding: 10px 40px 20px 100px;
+    height: 80px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.header .logo {
+    color: white;
+    margin-right: 50px;
+}
+
+.header nav {
+    flex-grow: 1; 
+}
+
+.header ul {
+    list-style: none;
+    display: flex;
+    align-items: flex-end;
+    margin: 0; 
+    gap: 55px;
+}
+
+.header ul li {
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.icons {
+    display: flex;
+    gap: 10px;
+}
+
+
