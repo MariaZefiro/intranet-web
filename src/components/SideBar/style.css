@@ -4,6 +4,7 @@
     width: 15%;
     border-radius: 15px;
     font-family: Arial, sans-serif;
+    height: 77vh;
 }
 
 h3 {
@@ -19,6 +20,7 @@ h3 {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .app-icon {
@@ -46,12 +48,11 @@ h3 {
 }
 
 .lesteboard-icon {
-
     background-size: cover;
 }
 
 .other-icon {
-    
+
     background-size: cover;
 }
 
@@ -80,34 +81,46 @@ h3 {
     font-size: 20px;
 }
 
-.team {
+.news-and-events {
     margin-top: 20px;
 }
 
-.team-member {
+.news-item,
+.event-item {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #cfcdcb;
-    display: flex;
+.news-icon,
+.event-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
-.member-info p {
-    font-weight: bold;
+.news-info p,
+.event-info p {
     margin: 0;
+    font-size: 14px;
     color: #045441;
 }
 
-.member-info span {
-    color: #757575;
-    font-size: 12px;
+.icon-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+}
+
+.icon-item img {
+    width: 50px;
+    margin-right: 10px;
+    border-radius: 5%;
+    object-fit: cover;
 }

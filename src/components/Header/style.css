@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    align-items: flex-end; 
+    align-items: flex-end;
     background-color: #009373;
     padding: 10px 40px 20px 100px;
     height: 80px;
@@ -14,14 +14,14 @@
 }
 
 .header nav {
-    flex-grow: 1; 
+    flex-grow: 1;
 }
 
 .header ul {
     list-style: none;
     display: flex;
     align-items: flex-end;
-    margin: 0; 
+    margin: 0;
     gap: 55px;
 }
 
@@ -36,4 +36,28 @@
     gap: 10px;
 }
 
+.user-photo {
+    width: 50px;
+    border-radius: 50%;
+}
 
+.logout-button {
+    background: #007a60;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.logout-button:hover {
+    color: rgb(255, 0, 0);
+}
+
+.user-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}

@@ -23,7 +23,7 @@
 
 .ramal-grid {
     display: grid;
-    grid-template-columns: repeat(4, 250px); 
+    grid-template-columns: repeat(4, 300px); 
     gap: 15px;
     justify-content: center;
     align-items: center;
@@ -39,8 +39,9 @@
     padding: 12px 20px;
     background-color: #e7e7e7;
     margin-right: 5px;
-    font-size: 18px;
+    font-size: 14px;
     color: #045441;
+    width: 127px;
 }
 
 .ramal-button {

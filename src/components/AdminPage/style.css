@@ -1,0 +1,157 @@
+.content-admin {
+    display: flex;
+}
+
+.admin-page {
+    width: 75%;
+}
+
+.banner2 {
+    margin-top: 20px;
+    height: 435px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    width: 114%;
+}
+
+.sidebar2 {
+    background-color: #F5F5F5;
+    padding: 20px;
+    border-radius: 15px;
+    font-family: Arial, sans-serif;
+    width: 65%;
+    height: 84%;
+    margin-top: 40px;
+    min-width: 250px;
+}
+
+.sidebar-editing{
+    height: 100% !important;
+    position: relative;
+    top: -220px;
+}
+
+.container-text-admin {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    font-family: inherit;
+}
+
+.button-edit {
+    padding: 12.5px 30px;
+    border: 0;
+    border-radius: 100px;
+    background-color: #009373;
+    color: #ffffff;
+    font-weight: Bold;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 190px;
+    height: 40px;
+}
+
+.button-edit:hover {
+    background-color: #004637;
+    box-shadow: 0 0 20px #6fc5ff50;
+    transform: scale(1.1);
+}
+
+.button-edit:active {
+    background-color: #00bb92;
+    transition: all 0.25s;
+    -webkit-transition: all 0.25s;
+    box-shadow: none;
+    transform: scale(0.98);
+}
+
+.button-image {
+    padding: 12.5px 30px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #009373;
+    color: #ffffff;
+    font-weight: Bold;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 195px;
+    height: 40px;
+}
+
+.button-image:hover {
+    background-color: #003528;
+}
+
+.events2 {
+    display: flex;
+}
+
+.event-column-edit {
+    flex: 1;
+    padding: 10px;
+}
+
+.event-column-edit2 {
+    flex: 1;
+    padding: 10px;
+    margin-top: 70px;
+}
+
+.events2 .event1 {
+    background-color: #003528;
+}
+
+.events2 .event2 {
+    background-color: #009373;
+}
+
+.events2 .event3 {
+    background-color: #003528;
+    height: 50px;
+}
+
+.events2 .event4 {
+    background-color: #009373;
+    height: 50px;
+}
+
+.image-preview-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.image-preview {
+    width: 150px;
+    height: auto;
+    object-fit: cover;
+}
+
+.send_file {
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-access h3,
+.news-and-events h3 {
+    display: block;
+}

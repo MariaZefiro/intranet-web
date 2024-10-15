@@ -1,56 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../Header';
+import ClipboardJS from 'clipboard';
 import './style.css';
 
 const Ramais = () => {
     const ramais = [
-        { office: 'Escritório 1', number: '22134' },
-        { office: 'Escritório 2', number: '22135' },
-        { office: 'Escritório 3', number: '22136' },
-        { office: 'Escritório 4', number: '22137' },
-        { office: 'Escritório 5', number: '22138' },
-        { office: 'Escritório 6', number: '22139' },
-        { office: 'Escritório 7', number: '22140' },
-        { office: 'Escritório 8', number: '22141' },
-        { office: 'Escritório 9', number: '22142' },
-        { office: 'Escritório 1', number: '22134' },
-        { office: 'Escritório 2', number: '22135' },
-        { office: 'Escritório 3', number: '22136' },
-        { office: 'Escritório 4', number: '22137' },
-        { office: 'Escritório 5', number: '22138' },
-        { office: 'Escritório 6', number: '22139' },
-        { office: 'Escritório 7', number: '22140' },
-        { office: 'Escritório 8', number: '22141' },
-        { office: 'Escritório 9', number: '22142' },
-        { office: 'Escritório 1', number: '22134' },
-        { office: 'Escritório 2', number: '22135' },
-        { office: 'Escritório 3', number: '22136' },
-        { office: 'Escritório 4', number: '22137' },
-        { office: 'Escritório 5', number: '22138' },
-        { office: 'Escritório 6', number: '22139' },
-        { office: 'Escritório 7', number: '22140' },
-        { office: 'Escritório 8', number: '22141' },
-        { office: 'Escritório 9', number: '22142' },
-        { office: 'Escritório 1', number: '22134' },
-        { office: 'Escritório 2', number: '22135' },
-        { office: 'Escritório 3', number: '22136' },
-        { office: 'Escritório 4', number: '22137' },
-        { office: 'Escritório 5', number: '22138' },
-        { office: 'Escritório 6', number: '22139' },
-        { office: 'Escritório 7', number: '22140' },
-        { office: 'Escritório 8', number: '22141' },
-        { office: 'Escritório 9', number: '22142' },
+        { office: 'Escritório Itaboraí', number: '3130' },
+        { office: 'Escritório Rio Bonito', number: '3140' },
+        { office: 'Escritório Magé', number: '3150' },
+        { office: 'Escritório Maricá', number: '3160' },
+        { office: 'Escritório Tanguá', number: '3170' },
+        { office: 'Escritório Barroco', number: '3182' },
+        { office: 'Call Center', number: '3330' },
+        { office: 'Estoque', number: '3500' },
+        { office: 'Operacional', number: '3820' },
+        { office: 'Engenharia', number: '3900' },
+        { office: 'CGR', number: '3400' },
+        { office: 'Aferição', number: '3730' },
+        { office: 'Frota', number: '3850' },
+        { office: 'Recepção Casa 207', number: '3011' },
+        { office: 'Recepção Casa 178', number: '3013' },
+        { office: 'Portaria Base 3', number: '8080' },
+        { office: 'Diretoria Marcos', number: '3001' },
+        { office: 'Diretoria Marcos', number: '3002' },
+        { office: 'Diretoria Sandro ', number: '3005' },
+        { office: 'RH', number: '3020' },
+        { office: 'Logística', number: '3800' },
+        { office: 'Administrativo', number: '3060' },
+        { office: 'Corporativo', number: '3120' },
+        { office: 'Jurídico', number: '3350' },
+        { office: 'Desenvolvimento', number: '3430' },
+        { office: 'Projetos', number: '3600' },
+        { office: 'Comunicação', number: '3652' },
+        { office: 'TIC', number: '3700' },
+        { office: 'Helpdesk', number: '3450' },
+        { office: 'Patrimônio', number: '3603' },
     ];
 
-    const copyToClipboard = (number) => {
-        navigator.clipboard.writeText(number)
-            .then(() => {
+    useEffect(() => {
+        new ClipboardJS('.ramal-button', {
+            text: function (trigger) {
+                return trigger.innerText;
+            }
+        });
+    }, []);
 
-            })
-            .catch(err => {
-                console.error('Erro ao copiar o número: ', err);
-            });
-    };
 
     return (
         <div>
@@ -63,7 +57,7 @@ const Ramais = () => {
                     {ramais.map((ramal, index) => (
                         <div className="ramal-item" key={index}>
                             <span className="ramal-office">{ramal.office}</span>
-                            <button onClick={() => copyToClipboard(ramal.number)} className="ramal-button">{ramal.number}</button>
+                            <button className="ramal-button">{ramal.number}</button>
                         </div>
                     ))}
                 </div>

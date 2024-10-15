@@ -1,16 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import './style.css';
 import SupportAgentRoundedIcon from '@mui/icons-material/SupportAgentRounded';
 import CallRoundedIcon from '@mui/icons-material/CallRounded';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import config from '../../config';
 
 const MainContent = () => {
+  const backendIp = config.backend_ip;
+  const [greeting, setGreeting] = useState('');
+  const [events, setEvents] = useState([]);
+  const [carouselImages, setCarouselImages] = useState([]);
   const navigate = useNavigate();
 
-  const handleHomeClick = () => {
+  const username = localStorage.getItem('username');
+
+  useEffect(() => {
+    handleListData()
+    handleListCarousel()
+
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      setGreeting('Bom dia');
+    } else if (currentHour < 18) {
+      setGreeting('Boa tarde');
+    } else {
+      setGreeting('Boa noite');
+    }
+  }, []);
+
+  const handleListData = () => {
+    axios.get(`${backendIp}/api/events`)
+      .then(response => setEvents(response.data))
+      .catch(error => console.error(error));
+  };
+
+  const handleListCarousel = () => {
+    axios.get(`${backendIp}/api/carousel`)
+      .then(response => {
+        setCarouselImages(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar as imagens do carrossel:', error);
+      });
+  }
+
+  const handleRamaisClick = () => {
     navigate('/ramais');
   };
+
+  const handleSOSBeta = () => {
+    window.open('https://sosbeta.lestetelecom.com.br/login?go=/', '_blank');
+  }
 
   const settings = {
     dots: true,
@@ -34,62 +76,61 @@ const MainContent = () => {
 
   return (
     <div className="main-content">
-      <h2 className='text-boas'>Boa tarde, Maria</h2>
+      <h2 className='text-boas'>
+        {greeting}, {username ? username : 'Colaborador'}
+      </h2>
       <div className="banner">
         <Slider {...settings}>
-          <div>
-            <img src="/images/banner.png" alt="Banner 1" className="banner-image" />
-          </div>
-          <div>
-            <img src="/images/banner.png" alt="Banner 2" className="banner-image" />
-          </div>
-          <div>
-            <img src="/images/banner.png" alt="Banner 3" className="banner-image" />
-          </div>
+          {carouselImages.map((image, index) => (
+            <div key={index}>
+              <img
+                src={`http://10.1.254.46:5000/${image.image_url}`}
+                alt={`Banner ${index + 1}`}
+                className="banner-image"
+              />
+            </div>
+          ))}
         </Slider>
       </div>
 
       <div class="container-dashboard">
-
         <div class="events">
           <div>
             <h2 className='title-date'>Próximas datas</h2>
-            <div class="event event1">
-              <div class="event-name">Conectando <br></br>Rotas</div>
-              <div class="event-date"><strong>27/09</strong></div>
-            </div>
-
-            <div class="event event2">
-              <div class="event-name">Setembro <br></br>Amarelo</div>
-              <div class="event-date"><strong>30/09</strong></div>
-            </div>
+            {events.slice(0, 2).map(event => ( // Os dois primeiros eventos
+              <div className={`event event${event.id}`} key={event.id}>
+                <>
+                  <div className="event-name" dangerouslySetInnerHTML={{ __html: event.nome_data.replace(/\n/g, '<br />') }}></div>
+                  <div className="event-date"><strong>{event.data}</strong></div>
+                </>
+              </div>
+            ))}
           </div>
-          
-          <div className='events-subsection'>
-            <div class="event event1">
-              <div class="event-name">Outubro <br></br>Rosa</div>
-              <div class="event-date"><strong>01/10</strong></div>
-            </div>
 
-            <div class="event event2">
-              <div class="event-name">Final de <br></br>Ano</div>
-              <div class="event-date"><strong>31/12</strong></div>
-            </div>
+          <div className='events-subsection'>
+            {events.slice(2, 4).map(event => ( // Os dois últimos eventos
+              <div className={`event event${event.id}`} key={event.id}>
+                <>
+                  <div className="event-name" dangerouslySetInnerHTML={{ __html: event.nome_data.replace(/\n/g, '<br />') }}></div>
+                  <div className="event-date"><strong>{event.data}</strong></div>
+                </>
+              </div>
+            ))}
           </div>
         </div>
 
         <div class="buttons">
-          <button class="button chamado-button">
+          <button onClick={handleSOSBeta} class="button chamado-button">
             <div className='div-icon'>
               <span class="icon">
                 <SupportAgentRoundedIcon style={{ color: 'white', fontSize: '85px' }} />
               </span>
             </div>
             <div className='div-text'>
-              <span class="text">Solicitar <strong>Chamado</strong></span>
+              <span class="text">SOS <br></br><strong>Beta</strong></span>
             </div>
           </button>
-          <button onClick={handleHomeClick} class="button lista-button">
+          <button onClick={handleRamaisClick} class="button lista-button">
             <div className='div-icon'>
               <span class="icon">
                 <CallRoundedIcon style={{ color: 'white', fontSize: '85px' }} />
@@ -100,7 +141,6 @@ const MainContent = () => {
             </div>
           </button>
         </div>
-
       </div>
     </div>
   );

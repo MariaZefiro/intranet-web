@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import Logo from '../../assets/Logo';
 import { useNavigate } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
+import config from '../../config';
 
 const Header = () => {
+    const backendIp = config.backend_ip;
     const navigate = useNavigate();
+    const [userPhoto, setUserPhoto] = useState(null);
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const username = localStorage.getItem('username');
+
+
+    useEffect(() => {
+        if (username) {
+            fetchUserData();
+        }
+    }, [username]);
+
+    const fetchUserData = async () => {
+        try {
+            const response = await fetch(`${backendIp}/api/users?username=${username}`);
+            if (!response.ok) {
+                throw new Error('Erro ao buscar dados do usuário');
+            }
+            const data = await response.json();
+            if (data.length > 0) {
+                setUserPhoto(data[0].url_foto);
+            } else {
+                console.error('Usuário não encontrado');
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
+        }
+    };
 
     const handleSobreClick = () => {
         navigate('/sobre');
@@ -14,25 +44,49 @@ const Header = () => {
         navigate('/');
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('username');
+        setUserPhoto(null);
+        window.location.reload();
+    };
+
+    const handleAdminClick = () => {
+        navigate('/admin');
+    };
+
+    const handleTeamClick = () => {
+        navigate('/time');
+    };
+
     return (
-        <header class="header">
-            <div class="logo">
+        <header className="header">
+            <div className="logo">
                 <Logo />
             </div>
             <nav>
                 <ul>
                     <li onClick={handleHomeClick}>Home</li>
                     <li onClick={handleSobreClick}>Sobre Nós</li>
-                    <li>Materiais</li>
+                    <li onClick={handleTeamClick}>Nosso Time</li>
+                    {isAdmin && <li onClick={handleAdminClick}>Administração</li>}
                 </ul>
             </nav>
-            <div class="icons">
-                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-20bmpl-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NotificationsRoundedIcon" >
-                    <path d="M12 22c1.2 0 2.2-2 2-2.6c-5-0.3-1.2-9.2-2-9.2c-1.3 0.3-3 2.6-5.6 5.3-1.9 1.7-2.3 1.8-1.4 3.8"></path>
-                </svg>
-                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-20bmpl-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="PersonRoundedIcon" >
-                    <path d="M12 12c2.1 0 4-4-4-4 1.79-4 1.79-4 4 1.79-4 4 4 4 4 4 4"></path>
-                </svg>
+            <div className="icons">
+                {username ? (
+                    <div className="user-container">
+                        {userPhoto && (
+                            <img
+                                src={`http://10.1.254.46:5000/${userPhoto}`}
+                                alt={`${username}`}
+                                className="user-photo"
+                            />
+                        )}
+                        <button onClick={handleLogout} className="logout-button">Logout</button>
+                    </div>
+                ) : (
+                    <PersonIcon onClick={() => navigate('/login')} style={{ color: 'white', fontSize: '35px', cursor: 'pointer' }} />
+                )}
             </div>
         </header>
     );

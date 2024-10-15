@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# configuração backend
+/src/config.js
+
+# imagens
+/public/images

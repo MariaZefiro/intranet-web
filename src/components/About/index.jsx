@@ -27,10 +27,7 @@ const About = () => {
                 <section class="valores">
                     <h2>Nossos valores</h2>
                     <p>
-                        Atendemos uma das principais necessidades básicas do mundo atual com <strong class="destaque-texto">inovação, empatia e sempre da melhor maneira.</strong>
-                    </p>
-                    <p>
-                        Quando se fala em <strong class="destaque-texto">eficiência, força e proximidade</strong>, vamos sempre para a mesma direção: <strong class="destaque-texto2">LESTE</strong>
+                        Atendemos uma das principais necessidades básicas do mundo atual com <strong class="destaque-texto">inovação, empatia e sempre da melhor maneira.</strong> Quando se fala<br/>em <strong class="destaque-texto">eficiência, força e proximidade</strong> vamos sempre para a mesma direção: <strong class="destaque-texto2">LESTE</strong>
                     </p>
                     <img src="/images/grids_empresa.png" alt="Escritório da empresa" />
                 </section>
