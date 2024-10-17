@@ -25,7 +25,7 @@
     min-width: 250px;
 }
 
-.sidebar-editing{
+.sidebar-editing {
     height: 100% !important;
     position: relative;
     top: -220px;
@@ -65,6 +65,7 @@
     margin-top: 15px;
     width: 190px;
     height: 40px;
+    z-index: 1000;
 }
 
 .button-edit:hover {
@@ -136,8 +137,9 @@
 
 .image-preview-container {
     display: flex;
-    gap: 10px;
+    gap: 35px;
     flex-wrap: wrap;
+    max-width: 600px;
 }
 
 .image-preview {
@@ -154,4 +156,9 @@
 .quick-access h3,
 .news-and-events h3 {
     display: block;
+}
+
+.admin-page-content {
+    position: relative;
+    top: -240px;
 }

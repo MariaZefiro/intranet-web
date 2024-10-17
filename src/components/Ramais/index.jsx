@@ -34,7 +34,7 @@ const Ramais = () => {
         { office: 'Comunicação', number: '3652' },
         { office: 'TIC', number: '3700' },
         { office: 'Helpdesk', number: '3450' },
-        { office: 'Patrimônio', number: '3603' },
+        { office: 'Patrimônio', number: '3620' },
     ];
 
     useEffect(() => {

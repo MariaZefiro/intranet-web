@@ -4,10 +4,7 @@
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-}
-
-.post:hover {
-    transform: translateY(-5px);
+    border-left: 4px solid #009373;
 }
 
 .post.gerente {
@@ -22,13 +19,14 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    justify-content: space-between;
 }
 
 .post-avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 15px;
+    margin-right: 10px;
     object-fit: cover;
 }
 
@@ -36,6 +34,8 @@
     color: #003528;
     margin: 0;
     font-size: 1.1em;
+    position: relative;
+    top: 10px;
 }
 
 .post-date {
@@ -47,4 +47,72 @@
     color: #333;
     font-size: 1em;
     line-height: 1.5;
+}
+
+.post-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.post-image {
+    width: 300px;
+}
+
+.more-images {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 300px;
+    cursor: pointer;
+    min-height: 300px;
+}
+
+.post-like-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.like-count {
+    font-weight: bold;
+}
+
+
+.modal-image-post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+}
+
+.modal-content-image-post {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.close-modal-image-post {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.close-modal-image-post:hover,
+.close-modal-image-post:focus {
+    color: #bbb;
 }

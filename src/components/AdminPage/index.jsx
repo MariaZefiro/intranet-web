@@ -14,6 +14,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import InfoIcon from '@mui/icons-material/Info';
+import ConfirmationModal from '../ConfirmationModal';
+import EditIcon from '@mui/icons-material/Edit';
 import config from '../../config';
 import {
     Popover,
@@ -31,6 +33,10 @@ const AdminPage = () => {
     const backendIp = config.backend_ip;
     const [events, setEvents] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingDate, setIsEditingDate] = useState(false);
+    const [editingEventId, setEditingEventId] = useState(null);
+    const [editedName, setEditedName] = useState('');
+    const [editedDate, setEditedDate] = useState('');
     const [imageFile, setImageFile] = useState(null);
     const [carouselImages, setCarouselImages] = useState([]);
     const [avisos, setAvisos] = useState([]);
@@ -40,6 +46,9 @@ const AdminPage = () => {
     const [newIconName, setNewIconName] = useState('');
     const [newIconLink, setNewIconLink] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [isModalOpen3, setIsModalOpen3] = useState(false);
 
     const settings = {
         dots: true,
@@ -103,43 +112,43 @@ const AdminPage = () => {
         setEvents(events.map(event =>
             event.id === id ? { ...event, [field]: value } : event
         ));
+        console.log(value);
+    };
+
+    const handleEditDate = (eventId) => {
+        const eventToEdit = events.find(event => event.id === eventId);
+        setEditingEventId(eventId);
+        setEditedName(eventToEdit.nome_data);
+        setEditedDate(eventToEdit.data);
+        setIsEditingDate(true);
     };
 
     const handleSave = () => {
         // Salvar eventos
+        console.log(events)
         axios.post(`${backendIp}/api/save-events`, events)
             .then(response => {
-                console.log('Eventos salvos');
             })
             .catch(error => {
-                console.error(error);
-                alert('Erro ao salvar eventos.');
+                console.error('Erro ao salvar eventos', error);
             });
+
 
         // Salvar avisos
         axios.post(`${backendIp}/api/save-avisos`, avisos)
             .then(response => {
-                console.log('Avisos salvos');
+                handleListData();
             })
             .catch(error => {
-                console.error(error);
-                alert('Erro ao salvar avisos.');
+                console.error('Erro ao salvar avisos', error);
             });
 
-        // Salvar acesso rápido
-        axios.post(`${backendIp}/api/save-acesso`, acessoRapido)
-            .then(response => {
-                console.log('Acesso Rápido salvo');
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Erro ao salvar acesso rápido.');
-            });
-
-        alert('Todas as alterações foram salvas com sucesso!');
+        // Finalizar edição
         setIsEditing(false);
+        setIsEditingDate(false);
+        setEditingEventId(null);
+
         // Recarregar dados
-        handleListData();
         handleListAvisos();
         handleListAcessoRapido();
     };
@@ -185,25 +194,21 @@ const AdminPage = () => {
             }
         })
             .then(response => {
-                alert('Imagem adicionada ao carrossel com sucesso!');
-                setImageFile(null); // Limpa o arquivo selecionado
+                setImageFile(null);
                 handleListCarousel()
             })
             .catch(error => {
                 console.error(error);
-                alert('Erro ao adicionar a imagem ao carrossel.');
             });
     };
 
     const handleDeleteImage = (id) => {
         axios.delete(`${backendIp}/api/delete_carousel/${id}`)
             .then(response => {
-                alert('Imagem removida com sucesso!');
                 handleListCarousel();
             })
             .catch(error => {
                 console.error('Erro ao remover a imagem do carrossel:', error);
-                alert('Erro ao remover a imagem.');
             });
     };
 
@@ -238,24 +243,20 @@ const AdminPage = () => {
 
         if (response.ok) {
             const data = await response.json();
-            alert(data.message);
             handleListAvisos();
             setNewAviso('');
         } else {
             const errorData = await response.json();
-            alert(errorData.error);
         }
     };
 
     const handleDeleteAviso = (id) => {
         axios.delete(`${backendIp}/api/delete_aviso/${id}`)
             .then(response => {
-                alert('Aviso removido com sucesso!');
                 handleListAvisos();
             })
             .catch(error => {
                 console.error('Erro ao remover o aviso:', error);
-                alert('Erro ao remover o aviso.');
             });
     };
 
@@ -293,14 +294,14 @@ const AdminPage = () => {
                     className={'button-edit'}
                     style={{ marginLeft: '20px' }}
                 >
-                    {isEditing ? 'Salvar Alterações' : 'Editar Página'}
+                    {isEditing ? 'Finalizar Edição' : 'Editar Página'}
                 </button>
             </div>
             <div className='content-admin'>
                 <div className="admin-page">
-                    <div className="main-content" style={{ padding: '20px 80px' }}>
+                    <div className={`main-content ${isEditing ? 'admin-page-content' : ''}`} style={{ padding: '20px 80px' }}>
                         {isEditing ? (
-                            <div className="upload-section" style={{ marginTop: '40px' }}>
+                            <div className="upload-section" style={{ marginTop: '40px', width: '600px' }}>
                                 <h3>Adicionar Imagem ao Carrossel</h3>
                                 <form onSubmit={handleUploadSubmit}>
                                     <div className='send_file'>
@@ -322,7 +323,16 @@ const AdminPage = () => {
                                                 alt={`Carrossel ${index + 1}`}
                                                 className="image-preview"
                                             />
-                                            <DeleteIcon onClick={() => handleDeleteImage(image.id)} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer', color: 'red', fontSize: '22px' }} />
+                                            <DeleteIcon onClick={() => setIsModalOpen(true)} style={{ position: 'absolute',  right: '-25px', cursor: 'pointer', color: 'red', fontSize: '22px' }} />
+                                            <ConfirmationModal
+                                                isOpen={isModalOpen}
+                                                onClose={() => setIsModalOpen(false)}
+                                                onConfirm={() => {
+                                                    handleDeleteImage(image.id);
+                                                    setIsModalOpen(false);
+                                                }}
+                                                message={'Tem certeza que deseja excluir a Imagem do banner?'}
+                                            />
                                         </div>
                                     ))}
                                 </div>
@@ -350,20 +360,9 @@ const AdminPage = () => {
                                         <div className={`event event${event.id}`} key={event.id}>
                                             {isEditing ? (
                                                 <>
-                                                    <textarea
-                                                        value={event.nome_data}
-                                                        onChange={(e) => handleChange(event.id, 'nome_data', e.target.value)}
-                                                        rows={3}
-                                                        style={{ width: '100%', resize: 'vertical', border: '1px solid #ccc', borderRadius: '5px', maxHeight: '44px', fontFamily: 'inherit' }}
-
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        value={event.data}
-                                                        onChange={(e) => handleChange(event.id, 'data', e.target.value)}
-                                                        style={{ width: '100%', marginTop: '10px' }}
-                                                        className='textarea'
-                                                    />
+                                                    <div className="event-name" dangerouslySetInnerHTML={{ __html: event.nome_data.replace(/\n/g, '<br />') }}></div>
+                                                    <div className="event-date"><strong>{event.data}</strong></div>
+                                                    <EditIcon onClick={() => handleEditDate(event.id)} style={{ cursor: 'pointer' }} />
                                                 </>
                                             ) : (
                                                 <>
@@ -374,26 +373,14 @@ const AdminPage = () => {
                                         </div>
                                     ))}
                                 </div>
-
                                 <div className="event-column-edit2" style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
                                     {events.slice(2, 4).map(event => ( // Os dois últimos eventos
                                         <div className={`event event${event.id}`} key={event.id}>
                                             {isEditing ? (
                                                 <>
-                                                    <textarea
-                                                        value={event.nome_data}
-                                                        onChange={(e) => handleChange(event.id, 'nome_data', e.target.value)}
-                                                        rows={3}
-                                                        style={{ width: '100%', resize: 'vertical' }}
-                                                        className='textarea'
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        value={event.data}
-                                                        onChange={(e) => handleChange(event.id, 'data', e.target.value)}
-                                                        style={{ width: '100%', marginTop: '10px' }}
-                                                        className='textarea'
-                                                    />
+                                                    <div className="event-name" dangerouslySetInnerHTML={{ __html: event.nome_data.replace(/\n/g, '<br />') }}></div>
+                                                    <div className="event-date"><strong>{event.data}</strong></div>
+                                                    <EditIcon onClick={() => handleEditDate(event.id)} style={{ cursor: 'pointer' }} />
                                                 </>
                                             ) : (
                                                 <>
@@ -428,6 +415,26 @@ const AdminPage = () => {
                                 </button>
                             </div>
                         </div>
+                        <div>
+                            {isEditingDate && editingEventId && (
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <textarea
+                                        value={events.find(event => event.id === editingEventId)?.nome_data || ''}
+                                        onChange={(e) => handleChange(editingEventId, 'nome_data', e.target.value)}
+                                        rows={3}
+                                        style={{ width: '51%', marginLeft: '10px' }}
+                                        className='textarea'
+                                    />
+                                    <input
+                                        type="text"
+                                        value={events.find(event => event.id === editingEventId)?.data || ''}
+                                        onChange={(e) => handleChange(editingEventId, 'data', e.target.value)}
+                                        style={{ width: '51%', marginLeft: '10px', marginTop: '10px' }}
+                                        className='textarea'
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className='sidebar-admin'>
@@ -442,9 +449,9 @@ const AdminPage = () => {
                                                 <div
                                                     key={app.id}
                                                     className="icon-item"
-                                                    style={{ cursor: 'pointer', marginBottom: '10px', display: 'flex', justifyContent:'space-between' }}
+                                                    style={{ cursor: 'pointer', marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}
                                                 >
-                                                    <div style={{display:'flex', alignItems:'center'}}>
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
                                                         <img
                                                             src={`${backendIp}/${app.icone_url}`}
                                                             alt={app.nome}
@@ -453,7 +460,16 @@ const AdminPage = () => {
                                                         {app.nome}
                                                     </div>
                                                     <div>
-                                                        <RemoveIcon style={{ color: 'red' }} onClick={() => handleDelete(app.id)} />
+                                                        <RemoveIcon style={{ color: 'red' }} onClick={() => setIsModalOpen2(true)} />
+                                                        <ConfirmationModal
+                                                            isOpen={isModalOpen2}
+                                                            onClose={() => setIsModalOpen2(false)}
+                                                            onConfirm={() => {
+                                                                handleDelete(app.id);
+                                                                setIsModalOpen2(false);
+                                                            }}
+                                                            message={'Tem certeza que deseja excluir o Aplicativo Rápido?'}
+                                                        />
                                                     </div>
                                                 </div>
                                             ))}
@@ -555,8 +571,17 @@ const AdminPage = () => {
                                                 className='textarea'
                                             />
                                             <DeleteIcon
-                                                onClick={() => handleDeleteAviso(aviso.id)}
+                                                onClick={() => setIsModalOpen3(true)}
                                                 style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+                                            />
+                                            <ConfirmationModal
+                                                isOpen={isModalOpen3}
+                                                onClose={() => setIsModalOpen3(false)}
+                                                onConfirm={() => {
+                                                    handleDeleteAviso(aviso.id)
+                                                    setIsModalOpen3(false);
+                                                }}
+                                                message={'Tem certeza que deseja excluir o Aviso?'}
                                             />
                                         </div>
                                     ))}

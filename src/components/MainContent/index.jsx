@@ -74,10 +74,15 @@ const MainContent = () => {
     ),
   };
 
+  const formattedUsername = username === 'Comunicacao' ? 'Comunicação' : username;
+
+  const greetingMessage = `${greeting}, ${formattedUsername ? formattedUsername : 'Colaborador'}`;
+
+
   return (
     <div className="main-content">
       <h2 className='text-boas'>
-        {greeting}, {username ? username : 'Colaborador'}
+        {greetingMessage}
       </h2>
       <div className="banner">
         <Slider {...settings}>

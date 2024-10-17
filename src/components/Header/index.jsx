@@ -47,6 +47,7 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.removeItem('isAdmin');
         localStorage.removeItem('username');
+        localStorage.removeItem('isLogged');
         setUserPhoto(null);
         window.location.reload();
     };
