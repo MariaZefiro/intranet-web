@@ -131,7 +131,7 @@ const Sidebar = () => {
           {selectedIcons.map(icon => (
             <div key={icon.id} className="app-icon">
               <img
-                src={`http://10.1.254.46:5000/${icon.icone_url}`}
+                src={`${backendIp}/${icon.icone_url}`}
                 alt={icon.nome}
                 style={{ width: '30px', cursor: 'pointer' }}
                 onClick={() => handleAppClick(icon.link)}
@@ -159,7 +159,7 @@ const Sidebar = () => {
                           style={{ cursor: 'pointer', marginBottom: '10px', display: 'flex', alignItems: 'center' }}
                         >
                           <img
-                            src={`http://10.1.254.46:5000/${app.icone_url}`}
+                            src={`${backendIp}/${app.icone_url}`}
                             alt={app.nome}
                             style={{ width: '30px', marginRight: '10px' }}
                           />

@@ -3,7 +3,7 @@ import axios from 'axios';
 import './AddPost.css';
 import config from '../../config';
 
-const AddPost = ({ fetchPosts, onClose }) => {
+const AddPost = ({ fetchPosts, onClose, setIsLoading }) => {  
     const backendIp = config.backend_ip;
     const username = localStorage.getItem('username');
     const [files, setFiles] = useState([]);
@@ -24,6 +24,7 @@ const AddPost = ({ fetchPosts, onClose }) => {
         formData.append('conteudo', conteudo);
     
         try {
+            setIsLoading(true);  
             await axios.post(`${backendIp}/api/add_post`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -33,9 +34,11 @@ const AddPost = ({ fetchPosts, onClose }) => {
             fetchPosts();
             onClose();
         } catch (error) {
+            console.error('Erro ao adicionar post:', error);
+        } finally {
+            setIsLoading(false);  
         }
     };
-    
 
     return (
         <div className="add-panel">

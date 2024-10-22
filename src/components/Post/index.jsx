@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Post.css';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import config from '../../config';
 import ConfirmationModal from '../ConfirmationModal';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import AlertAdmin from '../Alert/Alert';
 
 const Post = ({ post, fetchPosts }) => {
     const { id, author, content, date, curtidas, avatar, postImages = [] } = post;
     const [likeCount, setLikeCount] = useState(curtidas || 0);
-    const [hasLiked, setHasLiked] = useState(false); 
+    const [hasLiked, setHasLiked] = useState(false);
     const [showAllImages, setShowAllImages] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +19,26 @@ const Post = ({ post, fetchPosts }) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('success');
     const username = localStorage.getItem('username');
+    const isLogged2 = localStorage.getItem('isLogged2');
+    const userId = localStorage.getItem('userId');
+    const backendIp = config.backend_ip;
+
+
+    useEffect(() => {
+        const checkIfLiked = async () => {
+            const backendIp = config.backend_ip;
+            try {
+                const response = await axios.get(`${backendIp}/api/check_like_status`, {
+                    params: { post_id: id, usuario_id: userId }
+                });
+                console.log(response.data);
+                setHasLiked(response.data.hasLiked);  
+            } catch (error) {
+                console.error('Erro ao verificar o status de curtida:', error);
+            }
+        };
+        checkIfLiked();
+    }, [id, userId]);
 
     const handleShowAllImages = () => {
         setShowAllImages(true);
@@ -29,34 +50,22 @@ const Post = ({ post, fetchPosts }) => {
 
     const handleLike = async () => {
         const backendIp = config.backend_ip;
-        let newLikeCount = likeCount;
-
-        if (hasLiked) {
-            newLikeCount -= 1; 
-            setHasLiked(false);
-        } else {
-            newLikeCount += 1; 
-            setHasLiked(true);
-        }
-
-        setLikeCount(newLikeCount);
-        // localStorage.setItem('isLiked', true);
+        const action = hasLiked ? 'unlike' : 'like';  // Alterna entre curtir e descurtir
 
         try {
             await axios.post(`${backendIp}/api/edit_posts`, {
-                posts: [
-                    {
-                        id: id,
-                        curtidas: newLikeCount
-                    }
-                ]
+                id: post.id,
+                usuario_id: userId,
+                action: action  // Ação de curtir ou descurtir
             });
 
-            fetchPosts();
+            // Atualiza o contador de curtidas e o estado de curtida
+            setLikeCount(action === 'like' ? likeCount + 1 : likeCount - 1);
+            setHasLiked(!hasLiked);
+
+            fetchPosts(); // Recarrega os posts após curtir/descurtir
         } catch (error) {
-            console.error('Erro ao curtir o post:', error);
-            setLikeCount(likeCount);
-            setHasLiked(hasLiked); 
+            console.error('Erro ao curtir ou descurtir o post:', error);
         }
     };
 
@@ -98,14 +107,14 @@ const Post = ({ post, fetchPosts }) => {
                     {postImages.map((img, index) => (
                         <img
                             key={index}
-                            src={`http://10.1.254.46:5000/${img}`}
+                            src={`${backendIp}/${img}`}
                             alt={`Imagem do Post ${index + 1}`}
                             className="post-image"
                             onClick={() => handleImageClick(img)}
                         />
                     ))}
-                    <div className="more-images" onClick={handleHideAllImages}>
-                        Voltar à visualização normal
+                    <div className="more-images2" onClick={handleHideAllImages}>
+                        Ver menos...
                     </div>
                 </div>
             );
@@ -117,7 +126,7 @@ const Post = ({ post, fetchPosts }) => {
                 {imagesToShow.map((img, index) => (
                     <img
                         key={index}
-                        src={`http://10.1.254.46:5000/${img}`}
+                        src={`${backendIp}/${img}`}
                         alt={`Imagem do Post ${index + 1}`}
                         className="post-image"
                         onClick={() => handleImageClick(img)}
@@ -147,8 +156,8 @@ const Post = ({ post, fetchPosts }) => {
         <div className="post">
             <div className="post-header">
                 <div style={{ display: 'flex' }}>
-                    <img src={`http://10.1.254.46:5000/${avatar}`} alt={`${author}`} className="post-avatar" />
-                    <div style={{position:'relative', top:'-5px'}}>
+                    <img src={`${backendIp}/${avatar}`} alt={`${author}`} className="post-avatar" />
+                    <div style={{ position: 'relative', top: '-5px' }}>
                         <h3 className="post-author">{formattedUsername}</h3>
                         <p className="post-date">{date}</p>
                     </div>
@@ -167,18 +176,29 @@ const Post = ({ post, fetchPosts }) => {
                 dangerouslySetInnerHTML={{ __html: linkify(content.replace(/\n/g, '<br/>')) }}
             ></p>
             {renderImages()}
-            <div className="post-like-section">
-                <ThumbUpIcon
-                    style={{ padding: '10px', color: hasLiked ? '#009373' : '#009373', cursor: 'pointer' }} 
-                    onClick={handleLike}
-                />
-                <span className="like-count">{likeCount} curtidas {hasLiked && <span style={{fontWeight:'normal'}} className="like-alert">- Você já curtiu este post!</span>} </span>
-            </div>
+            {isLogged2 && (
+                <div className="post-like-section">
+                    {hasLiked ?
+                        (
+                            <ThumbUpIcon
+                                style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '26px' }}
+                                onClick={handleLike}
+                            />
+                        ) : (
+                            <ThumbUpOffAltIcon
+                                style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '27px' }}
+                                onClick={handleLike}
+                            />
+                        )
+                    }
+                    <span className="like-count">{likeCount} curtidas </span>
+                </div>
+            )}
 
             {selectedImage && (
                 <div className="modal-image-post" onClick={handleCloseModal}>
                     <span className="close-modal-image-post" onClick={handleCloseModal}>&times;</span>
-                    <img className="modal-content-image-post" src={`http://10.1.254.46:5000/${selectedImage}`} alt="Imagem grande" />
+                    <img className="modal-content-image-post" src={`${backendIp}/${selectedImage}`} alt="Imagem grande" />
                 </div>
             )}
             <ConfirmationModal

@@ -56,7 +56,10 @@
 }
 
 .post-image {
+    max-width: 300px;
     width: 300px;
+    cursor: pointer;
+    max-height: 300px;
 }
 
 .more-images {
@@ -68,6 +71,18 @@
     width: 300px;
     cursor: pointer;
     min-height: 300px;
+}
+
+.more-images2 {
+    display: flex;
+    justify-content: center;
+    color: #009373;
+    width: 100px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-bottom: 2px solid #009373;
+    border-radius: 3px;
+    padding: 2px;
 }
 
 .post-like-section {

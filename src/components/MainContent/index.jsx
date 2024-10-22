@@ -14,7 +14,8 @@ const MainContent = () => {
   const [carouselImages, setCarouselImages] = useState([]);
   const navigate = useNavigate();
 
-  const username = localStorage.getItem('username');
+  const nome_completo = localStorage.getItem('nome_completo') || ''; 
+  const primeiro_nome = nome_completo ? nome_completo.split(' ')[0] : 'Colaborador'; 
 
   useEffect(() => {
     handleListData()
@@ -74,7 +75,7 @@ const MainContent = () => {
     ),
   };
 
-  const formattedUsername = username === 'Comunicacao' ? 'Comunicação' : username;
+  const formattedUsername = primeiro_nome === 'Comunicacao' ? 'Comunicação' : primeiro_nome;
 
   const greetingMessage = `${greeting}, ${formattedUsername ? formattedUsername : 'Colaborador'}`;
 
@@ -89,7 +90,7 @@ const MainContent = () => {
           {carouselImages.map((image, index) => (
             <div key={index}>
               <img
-                src={`http://10.1.254.46:5000/${image.image_url}`}
+                src={`${backendIp}/${image.image_url}`}
                 alt={`Banner ${index + 1}`}
                 className="banner-image"
               />
