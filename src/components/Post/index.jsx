@@ -32,7 +32,7 @@ const Post = ({ post, fetchPosts }) => {
                     params: { post_id: id, usuario_id: userId }
                 });
                 console.log(response.data);
-                setHasLiked(response.data.hasLiked);  
+                setHasLiked(response.data.hasLiked);
             } catch (error) {
                 console.error('Erro ao verificar o status de curtida:', error);
             }
@@ -62,8 +62,6 @@ const Post = ({ post, fetchPosts }) => {
             // Atualiza o contador de curtidas e o estado de curtida
             setLikeCount(action === 'like' ? likeCount + 1 : likeCount - 1);
             setHasLiked(!hasLiked);
-
-            fetchPosts(); // Recarrega os posts após curtir/descurtir
         } catch (error) {
             console.error('Erro ao curtir ou descurtir o post:', error);
         }
@@ -176,24 +174,26 @@ const Post = ({ post, fetchPosts }) => {
                 dangerouslySetInnerHTML={{ __html: linkify(content.replace(/\n/g, '<br/>')) }}
             ></p>
             {renderImages()}
-            {isLogged2 && (
-                <div className="post-like-section">
-                    {hasLiked ?
-                        (
-                            <ThumbUpIcon
-                                style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '26px' }}
-                                onClick={handleLike}
-                            />
-                        ) : (
-                            <ThumbUpOffAltIcon
-                                style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '27px' }}
-                                onClick={handleLike}
-                            />
-                        )
-                    }
-                    <span className="like-count">{likeCount} curtidas </span>
-                </div>
-            )}
+            <div className="post-like-section">
+                {isLogged2 && (
+                    <div>
+                        {hasLiked ?
+                            (
+                                <ThumbUpIcon
+                                    style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '26px' }}
+                                    onClick={handleLike}
+                                />
+                            ) : (
+                                <ThumbUpOffAltIcon
+                                    style={{ padding: '10px', color: '#009373', cursor: 'pointer', fontSize: '27px' }}
+                                    onClick={handleLike}
+                                />
+                            )
+                        }
+                    </div>
+                )}
+                <span className="like-count">{likeCount} curtidas </span>
+            </div>
 
             {selectedImage && (
                 <div className="modal-image-post" onClick={handleCloseModal}>
